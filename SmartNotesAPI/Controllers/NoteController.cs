@@ -1,0 +1,61 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using SmartNotesAPI.Models;
+
+using System.Threading.Tasks;
+
+namespace SmartNotesAPI.Controllers
+{
+
+    [ApiController]
+    [Route("api/Note")]
+    public class noteController : ControllerBase
+    {
+        static List<Note> notes = new List<Note>
+            {
+                new Note { Id = 1, Title = "Task.WhenAll", Content = "await rethrows only the first exception", Date = DateTime.Now },
+                new Note { Id = 2, Title = "async void", Content = "no Task to hold the exception, so the process crashes", Date = DateTime.Now },
+                new Note { Id = 3, Title = "Shared HttpClient", Content = "one per app, to avoid socket exhaustion", Date = DateTime.Now }
+            };
+        [HttpGet]
+        public async Task<IActionResult> GetNotes()
+        {
+
+            // Logic to retrieve notes from the database or any data source
+            var response_notes = await Task.FromResult(notes); // Simulating async operation
+
+            return Ok(response_notes);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetNoteById(int id)
+        {
+            int noteId = id;
+             foreach(var note in notes)
+            {
+                if(note.Id == noteId)
+                {
+                    return Ok(note);
+                }
+            }
+
+            return NotFound();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteNote(int id)
+        {
+            int noteId = id;
+            foreach (var note in notes)
+            {
+                if (note.Id == noteId)
+                {
+                    notes.Remove(note);
+                    return NoContent();
+                }
+                
+            }
+
+            return BadRequest();
+        }
+    }
+}

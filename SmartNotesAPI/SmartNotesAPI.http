@@ -1,0 +1,16 @@
+@SmartNotesAPI_HostAddress = http://localhost:5283
+
+
+GET {{SmartNotesAPI_HostAddress}}/api/Note
+
+###
+
+DELETE {{SmartNotesAPI_HostAddress}}/api/Note/1
+
+
+
+###
+DELETE {{SmartNotesAPI_HostAddress}}/api/Note/2
+
+###
+DELETE {{SmartNotesAPI_HostAddress}}/api/Note/1
