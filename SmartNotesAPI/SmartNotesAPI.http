@@ -14,3 +14,25 @@ DELETE {{SmartNotesAPI_HostAddress}}/api/Note/2
 
 ###
 DELETE {{SmartNotesAPI_HostAddress}}/api/Note/1
+
+###
+
+
+
+PUT {{SmartNotesAPI_HostAddress}}/api/Note/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "Routing3333", 
+  "content": "method plus URL picks the action"
+}
+###
+
+POST {{SmartNotesAPI_HostAddress}}/api/Note
+Content-Type: application/json
+
+{
+  "title": "Routing",
+  "content": "method plus URL picks the action"
+}

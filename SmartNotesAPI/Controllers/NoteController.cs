@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartNotesAPI.Models;
 
-using System.Threading.Tasks;
+
 
 namespace SmartNotesAPI.Controllers
 {
@@ -57,5 +57,51 @@ namespace SmartNotesAPI.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost]
+        public IActionResult AddNote(Note note)
+        {
+            if (note == null)
+            {
+                return BadRequest();
+            }
+
+            Note newnote = new Note
+            {
+                Id = notes.Count + 1,
+                Title = note.Title,
+                Content = note.Content,
+                Date = DateTime.Now
+            };
+            notes.Add(newnote);
+            return CreatedAtAction(nameof(GetNoteById), new { id = newnote.Id }, newnote);
+        }
+
+        [HttpPut("{id}")]
+
+        public IActionResult UpdateNote(int id, Note note)
+        {
+            int updateNoteId = id;
+            foreach (var n in notes)
+            {
+                if (n.Id == updateNoteId)
+                {
+
+                    n.Title = note.Title;
+                    n.Content = note.Content;
+                    n.Date = DateTime.Now;
+                    Note updatedNote = n;
+
+                    return Ok(updatedNote);
+
+
+                }
+                
+
+            }
+            return BadRequest();
+
+        }
+
     }
 }
