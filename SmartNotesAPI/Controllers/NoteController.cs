@@ -7,15 +7,17 @@ namespace SmartNotesAPI.Controllers
 {
 
     [ApiController]
-    [Route("api/Note")]
+    [Route("api/[Controller]")]
     public class NoteController : ControllerBase
     {
-        static List<Note> notes = new List<Note>
+        public static List<Note> notes = new List<Note>
             {
-                new Note { Id = 1, Title = "Task.WhenAll", Content = "await rethrows only the first exception", Date = DateTime.Now },
-                new Note { Id = 2, Title = "async void", Content = "no Task to hold the exception, so the process crashes", Date = DateTime.Now },
-                new Note { Id = 3, Title = "Shared HttpClient", Content = "one per app, to avoid socket exhaustion", Date = DateTime.Now }
+                new Note { Id = 1, Title = "Task.WhenAll", Content = "await rethrows only the first exception", Date = DateTime.Now,CategoryId=1 },
+                new Note { Id = 2, Title = "async void", Content = "no Task to hold the exception, so the process crashes", Date = DateTime.Now ,CategoryId=1},
+                new Note { Id = 3, Title = "Shared HttpClient", Content = "one per app, to avoid socket exhaustion", Date = DateTime.Now,CategoryId=2}
             };
+
+       
         [HttpGet]
         public async Task<IActionResult> GetNotes()
         {
@@ -25,6 +27,7 @@ namespace SmartNotesAPI.Controllers
 
             return Ok(response_notes);
         }
+
 
         [HttpGet("{id}")]
         public IActionResult GetNoteById(int id)
@@ -40,6 +43,7 @@ namespace SmartNotesAPI.Controllers
 
             return NotFound();
         }
+
 
         [HttpDelete("{id}")]
         public IActionResult DeleteNote(int id)
@@ -59,36 +63,7 @@ namespace SmartNotesAPI.Controllers
             return NotFound();
         }
 
-        [HttpPost]
-        public IActionResult AddNote(Note note)
-        {
-            
-           
-
-            Note newnote = new Note();
-
-            if ( notes.Count== 0)
-            {
-
-                    newnote.Id = 1;    
-                
-            }
-
-            else
-            {
-
-                newnote.Id = notes.Max(n => n.Id) + 1;
-                
-            }
-
-            newnote.Title = note.Title;
-            newnote.Content = note.Content;
-            newnote.Date = DateTime.Now;
-
-            notes.Add(newnote);
-            return CreatedAtAction(nameof(GetNoteById), new { id = newnote.Id }, newnote);
-        }
-
+        
         [HttpPut("{id}")]
 
         public IActionResult UpdateNote(int id, Note note)
@@ -101,9 +76,8 @@ namespace SmartNotesAPI.Controllers
                     n.Title = note.Title;
                     n.Content = note.Content;
                     n.Date = DateTime.Now;
-                    Note updatedNote = n;
 
-                    return Ok(updatedNote);
+                    return Ok(n);
 
 
                 }

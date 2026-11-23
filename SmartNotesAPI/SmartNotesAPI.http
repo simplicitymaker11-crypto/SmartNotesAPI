@@ -1,16 +1,16 @@
 @SmartNotesAPI_HostAddress = http://localhost:5283
 
 
-GET {{SmartNotesAPI_HostAddress}}/api/Note/Count
+GET {{SmartNotesAPI_HostAddress}}/api/Category/2/notes
 
 ###
 
-DELETE {{SmartNotesAPI_HostAddress}}/api/Note/3
+DELETE {{SmartNotesAPI_HostAddress}}/api/Note/1
 
 
 
 ###
-DELETE {{SmartNotesAPI_HostAddress}}/api/Note/2
+DELETE {{SmartNotesAPI_HostAddress}}/api/Category/1
 
 ###
 DELETE {{SmartNotesAPI_HostAddress}}/api/Note/1
@@ -19,20 +19,21 @@ DELETE {{SmartNotesAPI_HostAddress}}/api/Note/1
 
 
 
-PUT {{SmartNotesAPI_HostAddress}}/api/Note/
+PUT {{SmartNotesAPI_HostAddress}}/api/Category/2
 Content-Type: application/json
 
 {
   
-  "title": "Routing333", 
-  "content": "method plus RL picks the action"
+  
+  "Name": "method plus URL picks the action"
 }
 ###
 
-POST {{SmartNotesAPI_HostAddress}}/api/Note
+POST {{SmartNotesAPI_HostAddress}}/api/Category/2
 Content-Type: application/json
 
 {
   
-  "content": "method plus URL picks the action"
+  
+  "Name": "method plus URL picks the action"
 }
