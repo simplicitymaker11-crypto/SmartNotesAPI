@@ -64,6 +64,7 @@ namespace SmartNotesAPI.Controllers
         }
 
         
+
         [HttpPut("{id}")]
 
         public IActionResult UpdateNote(int id, Note note)
@@ -86,6 +87,38 @@ namespace SmartNotesAPI.Controllers
             }
             return NotFound();
 
+        }
+
+        [HttpPost]
+        public IActionResult AddNote(Note note)
+        {
+
+            bool category_exists = CategoryController.Categories.Any(c => c.Id == note.CategoryId);
+
+            if (!category_exists) return NotFound("Category not found");
+
+            Note newnote = new Note();
+
+            if (notes.Count == 0)
+            {
+
+                newnote.Id = 1;
+
+            }
+
+            else
+            {
+
+                newnote.Id = notes.Max(n => n.Id) + 1;
+
+            }
+
+            newnote.Title = note.Title;
+            newnote.Content = note.Content;
+            newnote.Date = DateTime.Now;
+
+            notes.Add(newnote);
+            return CreatedAtAction(nameof(GetNoteById), new { id = newnote.Id }, newnote);
         }
 
         [HttpGet("count")]

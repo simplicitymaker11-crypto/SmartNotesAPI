@@ -97,6 +97,35 @@ namespace SmartNotesAPI.Controllers
 
         }
 
+
+        [HttpPost]
+        public IActionResult AddCategory(Category category)
+        {
+
+
+
+            Category newcategory = new Category();
+
+            if (Categories.Count == 0)
+            {
+
+                newcategory.Id = 1;
+
+            }
+
+            else
+            {
+
+                newcategory.Id = Categories.Max(c => c.Id) + 1;
+
+            }
+
+            newcategory.Name = category.Name;
+
+            Categories.Add(newcategory);
+            return CreatedAtAction(nameof(GetCategoryById), new { id = newcategory.Id }, newcategory);
+        }
+
         [HttpGet("count")]
         public IActionResult CountCategories()
         {
