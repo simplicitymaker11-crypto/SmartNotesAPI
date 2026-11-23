@@ -33,6 +33,6 @@ POST {{SmartNotesAPI_HostAddress}}/api/Note
 Content-Type: application/json
 
 {
-  "title": "Routg",
+  
   "content": "method plus URL picks the action"
 }

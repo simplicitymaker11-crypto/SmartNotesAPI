@@ -98,7 +98,6 @@ namespace SmartNotesAPI.Controllers
             {
                 if (n.Id == updateNoteId)
                 {
-
                     n.Title = note.Title;
                     n.Content = note.Content;
                     n.Date = DateTime.Now;
