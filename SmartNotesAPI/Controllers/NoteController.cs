@@ -8,7 +8,7 @@ namespace SmartNotesAPI.Controllers
 
     [ApiController]
     [Route("api/Note")]
-    public class noteController : ControllerBase
+    public class NoteController : ControllerBase
     {
         static List<Note> notes = new List<Note>
             {
@@ -30,9 +30,9 @@ namespace SmartNotesAPI.Controllers
         public IActionResult GetNoteById(int id)
         {
             int noteId = id;
-             foreach(var note in notes)
+            foreach (var note in notes)
             {
-                if(note.Id == noteId)
+                if (note.Id == noteId)
                 {
                     return Ok(note);
                 }
@@ -50,29 +50,41 @@ namespace SmartNotesAPI.Controllers
                 if (note.Id == noteId)
                 {
                     notes.Remove(note);
+
                     return NoContent();
                 }
-                
+
             }
 
-            return BadRequest();
+            return NotFound();
         }
 
         [HttpPost]
         public IActionResult AddNote(Note note)
         {
-            if (note == null)
+            
+           
+
+            Note newnote = new Note();
+
+            if ( notes.Count== 0)
             {
-                return BadRequest();
+
+                    newnote.Id = 1;    
+                
             }
 
-            Note newnote = new Note
+            else
             {
-                Id = notes.Count + 1,
-                Title = note.Title,
-                Content = note.Content,
-                Date = DateTime.Now
-            };
+
+                newnote.Id = notes.Max(n => n.Id) + 1;
+                
+            }
+
+            newnote.Title = note.Title;
+            newnote.Content = note.Content;
+            newnote.Date = DateTime.Now;
+
             notes.Add(newnote);
             return CreatedAtAction(nameof(GetNoteById), new { id = newnote.Id }, newnote);
         }
@@ -96,12 +108,21 @@ namespace SmartNotesAPI.Controllers
 
 
                 }
-                
+
 
             }
-            return BadRequest();
+            return NotFound();
 
         }
 
+        [HttpGet("count")]
+        public IActionResult CountNotes()
+        {
+            string total_notes = notes.Count.ToString();
+            return Ok(total_notes);
+
+
+
+        }
     }
 }
