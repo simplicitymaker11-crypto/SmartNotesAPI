@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartNotesAPI.Models;
+using SmartNotesAPI.Services;
 
 
 
@@ -21,10 +22,9 @@ namespace SmartNotesAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetNotes()
         {
-
-            // Logic to retrieve notes from the database or any data source
-            var response_notes = await Task.FromResult(notes); // Simulating async operation
-
+            NoteService service = new NoteService();
+           var response_notes = service.GetNotes();//ogic to retrieve notes from the database or any data source
+           
             return Ok(response_notes);
         }
 
@@ -48,76 +48,34 @@ namespace SmartNotesAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteNote(int id)
         {
-            int noteId = id;
-            foreach (var note in notes)
-            {
-                if (note.Id == noteId)
-                {
-                    notes.Remove(note);
 
-                    return NoContent();
-                }
-
-            }
-
+            NoteService service = new NoteService();
+            bool response = service.DeleteNote(id);
+            if (response) return NoContent();
             return NotFound();
+
         }
 
         
 
         [HttpPut("{id}")]
 
-        public IActionResult UpdateNote(int id, Note note)
+        public IActionResult UpdateNote(int id, requestNotes note)
         {
-            int updateNoteId = id;
-            foreach (var n in notes)
-            {
-                if (n.Id == updateNoteId)
-                {
-                    n.Title = note.Title;
-                    n.Content = note.Content;
-                    n.Date = DateTime.Now;
-
-                    return Ok(n);
-
-
-                }
-
-
-            }
-            return NotFound();
+            NoteService service = new NoteService();
+            bool is_note_updated = service.UpdateNote(id, note);
+            if (!is_note_updated) return BadRequest("Catrgory id or Note id nor exists!");
+            return Ok();
 
         }
 
         [HttpPost]
-        public IActionResult AddNote(Note note)
+        public IActionResult AddNote(requestNotes note)
         {
-
-            bool category_exists = CategoryController.Categories.Any(c => c.Id == note.CategoryId);
-
-            if (!category_exists) return NotFound("Category not found");
-
-            Note newnote = new Note();
-
-            if (notes.Count == 0)
-            {
-
-                newnote.Id = 1;
-
-            }
-
-            else
-            {
-
-                newnote.Id = notes.Max(n => n.Id) + 1;
-
-            }
-
-            newnote.Title = note.Title;
-            newnote.Content = note.Content;
-            newnote.Date = DateTime.Now;
-
-            notes.Add(newnote);
+            
+            NoteService service = new NoteService();
+            bool is_note_added = service.AddNote(note);
+            if (!is_note_added) return BadRequest("Catrgory id nor exists!");
             return CreatedAtAction(nameof(GetNoteById), new { id = newnote.Id }, newnote);
         }
 

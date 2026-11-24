@@ -29,11 +29,14 @@ Content-Type: application/json
 }
 ###
 
-POST {{SmartNotesAPI_HostAddress}}/api/Category/2
+POST {{SmartNotesAPI_HostAddress}}/api/Note
 Content-Type: application/json
 
 {
   
   
-  "Name": "method plus URL picks the action"
+  "Title": "method plus URL picks the action",
+  "Content": "This is the content of the note",
+  
+  "CategoryId": 1
 }
