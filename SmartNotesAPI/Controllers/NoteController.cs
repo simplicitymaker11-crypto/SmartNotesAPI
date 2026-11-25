@@ -11,18 +11,13 @@ namespace SmartNotesAPI.Controllers
     [Route("api/[Controller]")]
     public class NoteController : ControllerBase
     {
-        public static List<Note> notes = new List<Note>
-            {
-                new Note { Id = 1, Title = "Task.WhenAll", Content = "await rethrows only the first exception", Date = DateTime.Now,CategoryId=1 },
-                new Note { Id = 2, Title = "async void", Content = "no Task to hold the exception, so the process crashes", Date = DateTime.Now ,CategoryId=1},
-                new Note { Id = 3, Title = "Shared HttpClient", Content = "one per app, to avoid socket exhaustion", Date = DateTime.Now,CategoryId=2}
-            };
 
-       
+        static NoteService service = new NoteService();
+
         [HttpGet]
         public async Task<IActionResult> GetNotes()
         {
-            NoteService service = new NoteService();
+           
            var response_notes = service.GetNotes();//ogic to retrieve notes from the database or any data source
            
             return Ok(response_notes);
@@ -32,16 +27,12 @@ namespace SmartNotesAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult GetNoteById(int id)
         {
-            int noteId = id;
-            foreach (var note in notes)
-            {
-                if (note.Id == noteId)
-                {
-                    return Ok(note);
-                }
-            }
 
-            return NotFound();
+            
+            Note result_note = service.GetNotesById(id);
+            if (result_note is null) return NotFound("Id not exist");
+            return Ok(result_note);
+
         }
 
 
@@ -49,7 +40,7 @@ namespace SmartNotesAPI.Controllers
         public IActionResult DeleteNote(int id)
         {
 
-            NoteService service = new NoteService();
+           
             bool response = service.DeleteNote(id);
             if (response) return NoContent();
             return NotFound();
@@ -62,27 +53,34 @@ namespace SmartNotesAPI.Controllers
 
         public IActionResult UpdateNote(int id, requestNotes note)
         {
-            NoteService service = new NoteService();
-            bool is_note_updated = service.UpdateNote(id, note);
-            if (!is_note_updated) return BadRequest("Catrgory id or Note id nor exists!");
-            return Ok();
+            bool category_exists = CategoryService.Categories.Any(c => c.Id == note.CategoryId) ;
+
+            if (!category_exists) return BadRequest("Category id does not exist!");
+
+            Note updated_note = service.UpdateNote(id, note);
+            if (updated_note is null) return BadRequest("Note id does not exist!");
+            return Ok(updated_note);
 
         }
 
         [HttpPost]
         public IActionResult AddNote(requestNotes note)
         {
+            bool category_exists = CategoryService.Categories.Any(c => c.Id == note.CategoryId);
+
+            if (!category_exists) return BadRequest();
+
+          
+            Note newnote = service.AddNote(note);
             
-            NoteService service = new NoteService();
-            bool is_note_added = service.AddNote(note);
-            if (!is_note_added) return BadRequest("Catrgory id nor exists!");
             return CreatedAtAction(nameof(GetNoteById), new { id = newnote.Id }, newnote);
         }
 
         [HttpGet("count")]
         public IActionResult CountNotes()
         {
-            string total_notes = notes.Count.ToString();
+          
+            string total_notes = service.CountNotes();
             return Ok(total_notes);
 
 

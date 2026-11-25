@@ -1,8 +1,9 @@
 ﻿using SmartNotesAPI.Models;
+using SmartNotesAPI.Services;
 
 namespace SmartNotesAPI.Services
 {
-    public class CategoryService
+    public class CategoryService : ICategoryService
     {
         public static List<Category> Categories = new List<Category>
         {
@@ -14,7 +15,11 @@ namespace SmartNotesAPI.Services
         {
             return Categories;
         }
-
+        
+        public List<Note> GetNotesByCategoryId(int categoryId)
+        {
+           return NoteService.notes.Where(c => c.CategoryId == categoryId).ToList();
+        }
         public Category GetCategoryById(int id)
         {
             foreach (var category in Categories)
@@ -26,6 +31,7 @@ namespace SmartNotesAPI.Services
             }
             return null;
         }
+
 
         public bool DeleteCategory(int id)
         {
@@ -41,7 +47,7 @@ namespace SmartNotesAPI.Services
             return false;
         }
 
-        public bool UpdateCategory(int id, Category category)
+        public Category UpdateCategory(int id, Category category)
         {
             int updateCategoryId = id;
             foreach (var c in Categories)
@@ -49,10 +55,10 @@ namespace SmartNotesAPI.Services
                 if (c.Id == updateCategoryId)
                 {
                     c.Name = category.Name;
-                    return true;
+                    return c;
                 }
             }
-            return false;
+            return null;
         }
 
         public Category AddCategory(Category category)

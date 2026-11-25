@@ -5,7 +5,7 @@ GET {{SmartNotesAPI_HostAddress}}/api/Category/2/notes
 
 ###
 
-DELETE {{SmartNotesAPI_HostAddress}}/api/Note/1
+DELETE {{SmartNotesAPI_HostAddress}}/api/Category/2
 
 
 
@@ -25,18 +25,17 @@ Content-Type: application/json
 {
   
   
-  "Name": "method plus URL picks the action"
+  "Name": "method plus URL picks the action",
+  "category": "This  the content of the note"
 }
 ###
 
-POST {{SmartNotesAPI_HostAddress}}/api/Note
+POST {{SmartNotesAPI_HostAddress}}/api/Category
 Content-Type: application/json
 
 {
   
   
-  "Title": "method plus URL picks the action",
-  "Content": "This is the content of the note",
-  
-  "CategoryId": 1
+  "Name": "method plus URL picks the action",
+  "category": "This is the content of the note"
 }

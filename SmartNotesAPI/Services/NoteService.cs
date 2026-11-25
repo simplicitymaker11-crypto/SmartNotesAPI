@@ -16,6 +16,17 @@ namespace SmartNotesAPI.Services
         {
             return notes;
         }
+        public Note GetNotesById(int id)
+        {
+            foreach (var note in notes)
+            {
+                if (note.Id == id)
+                {
+                    return note;
+                }
+            }
+            return null;
+        }
         public bool DeleteNote(int id)
         {
 
@@ -32,11 +43,9 @@ namespace SmartNotesAPI.Services
             return false;
         }
 
-        public bool UpdateNote(int id, requestNotes note)
+        public Note UpdateNote(int id, requestNotes note)
         {
-            bool category_exists = CategoryController.Categories.Any(c => c.Id == note.CategoryId) || NoteController.notes.Any(c => c.Id == id);
-
-            if (!category_exists) return false;
+            
 
             int updateNoteId = id;
             foreach (var n in notes)
@@ -45,23 +54,20 @@ namespace SmartNotesAPI.Services
                 {
                     n.Title = note.Title;
                     n.Content = note.Content;
-                    return true;
+                    return n;
 
 
                 }
 
 
             }
-            return false;
+            return null;
 
         }
 
-        public bool AddNote(requestNotes note)
+        public Note AddNote(requestNotes note)
         {
-            bool category_exists = CategoryController.Categories.Any(c => c.Id == note.CategoryId);
-
-            if (!category_exists) return true;
-
+            
             Note newnote = new Note();
 
             if (notes.Count == 0)
@@ -80,10 +86,17 @@ namespace SmartNotesAPI.Services
 
             newnote.Title = note.Title;
             newnote.Content = note.Content;
+            
             newnote.Date = DateTime.Now;
+            newnote.CategoryId = note.CategoryId;
 
             notes.Add(newnote);
-            return true;
+            return newnote;
+        }
+
+        public string CountNotes()
+        {
+            return notes.Count.ToString();
         }
     }
 }

@@ -7,10 +7,11 @@ namespace SmartNotesAPI.Services
     {
 
         IEnumerable<Category> GetCategories();
-        IEnumerable<Note> GetNotesByCategoryId(int categoryId);
+        Category GetCategoryById(int id);
+        List<Note> GetNotesByCategoryId(int categoryId);
         bool DeleteCategory(int id);
-        IEnumerable<Category> UpdateCategory(int id, Category category);
-        IEnumerable<Category> AddCategory(Category category);
+        Category UpdateCategory(int id, Category category);
+        Category AddCategory(Category category);
         string CountCategories();
 
     }

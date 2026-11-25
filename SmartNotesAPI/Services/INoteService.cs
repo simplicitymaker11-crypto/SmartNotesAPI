@@ -5,9 +5,10 @@ namespace SmartNotesAPI.Services
     public interface INoteService
     {
         IEnumerable<Note> GetNotes();
+        Note GetNotesById(int id);
         bool DeleteNote(int id);
-        bool UpdateNote(int id, requestNotes note);
-        IEnumerable<Note> AddNote(Note note);
+        Note UpdateNote(int id, requestNotes note);
+        Note AddNote(requestNotes note);
         string CountNotes();
     }
 }
